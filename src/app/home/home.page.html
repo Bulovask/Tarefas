@@ -29,7 +29,7 @@
     <ion-item-sliding *ngFor="let task of getFilteredTasks()">
       <ion-item color="light">
         <ion-label (click)="openViewTaskModal(task)" class="full-height">{{task.title}}</ion-label>
-        <ion-checkbox [(ngModel)]="task.completed" (ionChange)="updateTasks()" slot="start" color="dark"></ion-checkbox>
+        <ion-checkbox [(ngModel)]="task.completed" (ionChange)="updateTasks()" slot="start" color="primary"></ion-checkbox>
       </ion-item>
 
       <ion-item-options side="end">
@@ -78,8 +78,7 @@
             color="primary"
             name="title"
             formControlName="title"
-            [readonly]="taskModalType.toString() == 'View'"
-            >
+            [readonly]="taskModalType.toString() == 'View'">
           </ion-input>
           <ion-note 
             *ngIf="newTaskForm.get('title')?.invalid && newTaskForm.get('title')?.touched" 

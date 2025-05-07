@@ -1,10 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonSegment, IonSegmentButton, IonList, IonItem, IonLabel, IonButton, IonButtons, IonIcon, IonCheckbox, IonFab, IonFabButton, IonModal, IonInput, IonText, IonTextarea, IonNote, IonFooter, IonSearchbar, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonSegment, IonSegmentButton, IonList, IonItem, IonLabel, IonButton, IonButtons, IonIcon, IonCheckbox, IonFab, IonFabButton, IonModal, IonInput, IonTextarea, IonNote, IonSearchbar, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { addIcons } from 'ionicons';
 import { add, search, trash, pencil } from 'ionicons/icons'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task, TaskFilter, FilteredTask } from 'src/app/interfaces/task';
+import { addTask, getAllTasks, updateTask, deleteTask } from '../db';
 
 enum TaskModalType {
   New = 'New',
@@ -45,6 +46,13 @@ export class HomePage {
     addIcons({
       add, search, trash, pencil
     });
+
+    this.initializeDB();
+  }
+  
+  async initializeDB() {
+    this.tasks = await getAllTasks();
+    this.updateTasks();
   }
 
   searchTasks(tasks: Task[]) {
@@ -112,20 +120,27 @@ export class HomePage {
     return this.filteredTasks.map(filteredTask => filteredTask.target);
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.isTaskModalOpen = false;
     switch(this.taskModalType) {
       case TaskModalType.New:
-        this.newTaskForm.value.id = this.count_id++;
-        this.tasks.push({...this.newTaskForm.value});
+        // this.newTaskForm.value.id = this.count_id++;
+        // this.tasks.push({...this.newTaskForm.value});
+        const newTask = this.newTaskForm.value;
+        delete newTask.id;
+        await addTask(newTask);
+        this.tasks = await getAllTasks();
       break;
       case TaskModalType.Edit:
-        this.tasks.forEach(task => {
-          if(task.id === this.newTaskForm.value.id) {
-            task.title = this.newTaskForm.value.title;
-            task.description = this.newTaskForm.value.description;
-          }
-        });
+        // this.tasks.forEach(task => {
+        //   if(task.id === this.newTaskForm.value.id) {
+        //     task.title = this.newTaskForm.value.title;
+        //     task.description = this.newTaskForm.value.description;
+        //   }
+        // });
+        const updateTask = this.newTaskForm.value;
+        await updateTask(this.newTaskForm.value.id, updateTask);
+        this.tasks = await getAllTasks();
       break;
     }
     
