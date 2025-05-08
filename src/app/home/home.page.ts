@@ -94,6 +94,12 @@ export class HomePage {
     })
   }
 
+  async deleteTask(id: number) {
+    await deleteTask(id);
+    this.tasks = await getAllTasks();
+    this.updateTasks();
+  }
+
   setTaskFilter(taskFilter: TaskFilter | string | any) {
     if(typeof taskFilter === 'string')
     switch(taskFilter) {
@@ -124,22 +130,14 @@ export class HomePage {
     this.isTaskModalOpen = false;
     switch(this.taskModalType) {
       case TaskModalType.New:
-        // this.newTaskForm.value.id = this.count_id++;
-        // this.tasks.push({...this.newTaskForm.value});
         const newTask = this.newTaskForm.value;
         delete newTask.id;
         await addTask(newTask);
         this.tasks = await getAllTasks();
       break;
       case TaskModalType.Edit:
-        // this.tasks.forEach(task => {
-        //   if(task.id === this.newTaskForm.value.id) {
-        //     task.title = this.newTaskForm.value.title;
-        //     task.description = this.newTaskForm.value.description;
-        //   }
-        // });
-        const updateTask = this.newTaskForm.value;
-        await updateTask(this.newTaskForm.value.id, updateTask);
+        const updatedTask = this.newTaskForm.value;
+        await updateTask(this.newTaskForm.value.id, updatedTask);
         this.tasks = await getAllTasks();
       break;
     }

@@ -33,12 +33,12 @@
       </ion-item>
 
       <ion-item-options side="end">
-        <ion-item-option color="danger">
-          <ion-icon name="trash" size="large"></ion-icon>
-        </ion-item-option>
         <ion-item-option color="medium" (click)="openEditTaskModalWithArgument(task)">
           <ion-icon name="pencil" size="large"></ion-icon>
-        </ion-item-option> 
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="deleteTask(task.id || -1)">
+          <ion-icon name="trash" size="large"></ion-icon>
+        </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
 
