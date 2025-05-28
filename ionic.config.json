@@ -1,7 +1,0 @@
-{
-  "name": "Tarefas",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}
